@@ -21,6 +21,8 @@
     "mongoose": "^5.13.2"
   },
   "devDependencies": {
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0",
     "concurrently": "^6.2.0",
     "nodemon": "^2.0.12"
   }
