@@ -5,6 +5,8 @@ const EmployeeManagment = (props) => {
   return (
     <div>
       <h1>Employee Managment</h1>
+
+      <p>iudhsuifhiusdhiufhisudhfi</p>
     </div>
   )
 }
