@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import logo from '../../img/logo.png'
 import { setAlert } from '../../actions/alert'
 import { register } from '../../actions/auth'
 import PropTypes from 'prop-types'
 import Alert from '../layout/Alert'
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,30 +29,34 @@ const Register = ({ setAlert, register }) => {
     }
   }
 
+  if (isAuthenticated) {
+    return <Redirect to='/' />
+  }
+
   return (
     <Fragment>
-      <section class='vh-100 bg-light m-0'>
+      <section className='vh-100 bg-light m-0'>
         <div className='row h-100 justify-content-center m-0'>
-          <div class='col-md-6 align-self-center  '>
+          <div className='col-md-6 align-self-center  '>
             <div className='row justify-content-center'>
               <div className='brand'>
-                <img src={logo} class='rounded mx-auto d-block' alt='' />
+                <img src={logo} className='rounded mx-auto d-block' alt='' />
               </div>
             </div>
 
             <div className='row justify-content-center'>
               <div className='container w-50 login-container'>
                 <Alert />
-                <div class='card-body shadow-sm p-4 mb-5 bg-body rounded'>
-                  <h4 class='card-title mb-3'>Sign Up</h4>
+                <div className='card-body shadow-sm p-4 mb-5 bg-body rounded'>
+                  <h4 className='card-title mb-3'>Sign Up</h4>
                   <form onSubmit={(e) => onSubmit(e)}>
-                    <div class='mb-3'>
-                      <label for='username' class='form-label'>
+                    <div className='mb-3'>
+                      <label for='username' className='form-label'>
                         Name
                       </label>
                       <input
                         type='name'
-                        class='form-control'
+                        className='form-control'
                         id='username'
                         placeholder='Enter name'
                         name='name'
@@ -60,13 +64,13 @@ const Register = ({ setAlert, register }) => {
                         onChange={(e) => onChange(e)}
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='email' class='form-label'>
+                    <div className='mb-3'>
+                      <label for='email' className='form-label'>
                         Email
                       </label>
                       <input
                         type='email'
-                        class='form-control'
+                        className='form-control'
                         id='email'
                         placeholder='Enter email'
                         name='email'
@@ -74,13 +78,13 @@ const Register = ({ setAlert, register }) => {
                         onChange={(e) => onChange(e)}
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='Password1' class='form-label'>
+                    <div className='mb-3'>
+                      <label for='Password1' className='form-label'>
                         Password
                       </label>
                       <input
                         type='password'
-                        class='form-control'
+                        className='form-control'
                         id='Password1'
                         placeholder='Enter password'
                         name='password'
@@ -88,13 +92,13 @@ const Register = ({ setAlert, register }) => {
                         onChange={(e) => onChange(e)}
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='Password2' class='form-label'>
+                    <div className='mb-3'>
+                      <label for='Password2' className='form-label'>
                         Confirm Password
                       </label>
                       <input
                         type='password'
-                        class='form-control'
+                        className='form-control'
                         id='Password2'
                         placeholder='Confirm password'
                         name='password2'
@@ -125,6 +129,11 @@ const Register = ({ setAlert, register }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 }
 
-export default connect(null, { setAlert, register })(Register)
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+})
+
+export default connect(mapStateToProps, { setAlert, register })(Register)

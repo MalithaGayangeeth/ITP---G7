@@ -1,19 +1,45 @@
 import React from 'react'
-import TVimage from '../../../img/tv.jpg'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addToCart } from '../../../actions/cart'
 
-const Product = () => {
+const Product = ({ item, addToCart }) => {
+  const { product_name, product_image, product_brand, product_price } = item
+
+  const addCart = (Item) => {
+    addToCart({ ...Item, amount: 1 })
+  }
+
   return (
-    <div class='col'>
-      <div class='card'>
-        <img src={TVimage} class='card-img-top' alt='...' />
-        <div class='card-body'>
-          <h5 class='card-title'>Rs 34,990.00</h5>
-          <h6 class='card-title'>SAMSUNG HD LED TV 32" (UA32N4000AR)</h6>
-          <p class='card-text'> SAMSUNG</p>
+    <div className='col'>
+      <div className='card card-hover'>
+        <img src={product_image} className='card-img-top' alt={product_name} />
+        <div className='card-body'>
+          <h5 className='card-title'>{product_name}</h5>
+          <h6 className='card-title'>Rs. {product_price}</h6>
+          <span className='d-flex justify-content-between align-items-end'>
+            <p className='card-text'> {product_brand}</p>
+            <span
+              role='button'
+              className='circle-icon'
+              onClick={() => addCart(item)}
+            >
+              <i className='bi bi-cart-plus'></i>
+            </span>
+          </span>
         </div>
       </div>
     </div>
   )
 }
 
-export default Product
+Product.propTypes = {
+  addToCart: PropTypes.func.isRequired,
+  cart: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+})
+
+export default connect(mapStateToProps, { addToCart })(Product)

@@ -1,14 +1,54 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../../img/logo.png'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { logout } from '../../actions/auth'
 
-const Navbar = () => {
+const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
+  const authLinks = (
+    <li className='nav-item dropdown fw-normal fs-5'>
+      <span
+        className='nav-link dropdown-toggle'
+        id='navbarDarkDropdownMenuLink'
+        role='button'
+        data-bs-toggle='dropdown'
+      >
+        {user && user.name}
+      </span>
+      <ul className='dropdown-menu dropdown-menu-dark dropdown-menu-end'>
+        <li>
+          <Link className='dropdown-item' to='/profile'>
+            My Account
+          </Link>
+        </li>
+        <li>
+          <Link className='dropdown-item' to='#!'>
+            My Orders
+          </Link>
+        </li>
+        <li>
+          <span role='button' onClick={logout} className='dropdown-item'>
+            Logout
+          </span>
+        </li>
+      </ul>
+    </li>
+  )
+
+  const guestLinks = (
+    <li className='nav-item fw-normal fs-5'>
+      <Link to='/login' className='nav-link'>
+        Login <i className='bi bi-person-plus-fill'></i>
+      </Link>
+    </li>
+  )
+
   return (
     <div>
       <div className='section nav-bar-top d-md-block d-none'>
         <h6 className='text-light mb-0 top-left'>
           {' '}
-          <i class='bi bi-telephone-fill pe-2'></i>
+          <i className='bi bi-telephone-fill pe-2'></i>
           Hot Line <span className='fw-light'>+94 123 2345 </span>
           <span className='h5 fw-light ps-1 pe-1'>|</span>
           <Link to='/' className='text-decoration-none text-light'>
@@ -55,55 +95,18 @@ const Navbar = () => {
               style={{ flexDirection: 'row' }}
             >
               <li className='nav-item fw-normal fs-5'>
-                <Link
-                  to='/'
+                <span
                   className='nav-link'
+                  role='button'
                   data-bs-toggle='offcanvas'
                   data-bs-target='#offcanvasRight'
                 >
-                  Cart <i class='bi bi-cart-fill'></i>
-                </Link>
+                  Cart <i className='bi bi-cart-fill'></i>
+                </span>
               </li>
-              {/* <li className='nav-item fw-normal fs-5'>
-              <Link to='/login' className='nav-link'>
-                Login <i class='bi bi-person-plus-fill'></i>
-              </Link>
-            </li> */}
-              {/* After Login */}
-              <li className='nav-item dropdown fw-normal fs-5'>
-                <Link
-                  className='nav-link dropdown-toggle'
-                  to='/'
-                  id='navbarDarkDropdownMenuLink'
-                  role='button'
-                  data-bs-toggle='dropdown'
-                >
-                  Bhanuka
-                </Link>
-                <ul className='dropdown-menu dropdown-menu-dark dropdown-menu-end'>
-                  <li>
-                    <Link className='dropdown-item' to='/profile'>
-                      My Account
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className='dropdown-item' href='#'>
-                      My Orders
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className='dropdown-item' to='/admin'>
-                      Admin
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className='dropdown-item' href='#'>
-                      Logout
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              {/* After Login End */}
+              {!loading && (
+                <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+              )}
             </ul>
           </div>
         </div>
@@ -112,4 +115,13 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+Navbar.propTypes = {
+  logout: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+})
+
+export default connect(mapStateToProps, { logout })(Navbar)

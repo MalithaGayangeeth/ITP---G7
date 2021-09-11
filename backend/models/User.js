@@ -10,12 +10,22 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  mobile_number: {
+    type: Number,
+  },
+  birthday: {
+    type: Date,
+  },
+  gender: {
+    type: String,
+  },
   password: {
     type: String,
     required: true,
   },
-  avatar: {
+  user_type: {
     type: String,
+    default: 'User',
   },
   date: {
     type: Date,

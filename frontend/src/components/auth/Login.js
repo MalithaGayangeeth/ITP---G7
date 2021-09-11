@@ -1,8 +1,11 @@
 import React, { Fragment, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { login } from '../../actions/auth'
 import logo from '../../img/logo.png'
 
-const Login = () => {
+const Login = ({ login, isAuthenticated, user }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,7 +18,16 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log('SUCCESS')
+    login(email, password)
+  }
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    if (user && user.user_type === 'Admin') {
+      return <Redirect to='/admin' />
+    } else {
+      return <Redirect to='/' />
+    }
   }
 
   return (
@@ -39,34 +51,26 @@ const Login = () => {
                   <h4 className='card-title mb-3'>Login</h4>
                   <form onSubmit={(e) => onSubmit(e)}>
                     <div className='mb-3'>
-                      <label for='exampleInputEmail1' className='form-label'>
-                        Email address
-                      </label>
+                      <label className='form-label'>Email address</label>
                       <input
                         type='email'
                         className='form-control'
-                        id='exampleInputEmail1'
                         name='email'
                         value={email}
                         onChange={(e) => onChange(e)}
-                        required
                       />
                       <div id='emailHelp' className='form-text'>
                         We'll never share your email with anyone else.
                       </div>
                     </div>
                     <div className='mb-3'>
-                      <label for='exampleInputPassword1' className='form-label'>
-                        Password
-                      </label>
+                      <label className='form-label'>Password</label>
                       <input
                         type='password'
                         className='form-control'
-                        id='exampleInputPassword1'
                         name='password'
                         value={password}
                         onChange={(e) => onChange(e)}
-                        required
                       />
                     </div>
                     <button
@@ -90,4 +94,15 @@ const Login = () => {
   )
 }
 
-export default Login
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  user_type: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
+})
+
+export default connect(mapStateToProps, { login })(Login)

@@ -2,10 +2,17 @@ import React, { useState, useEffect, Fragment } from 'react'
 import Navbar from '../layout/Navbar'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCurrentProfile } from '../../actions/profile'
-import { Link } from 'react-router-dom'
+import { createProfile, getCurrentProfile } from '../../actions/profile'
 
-const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
+// alert
+import { setAlert } from '../../actions/alert'
+import Alert from '../layout/Alert'
+
+const EditProfile = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentProfile,
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,24 +35,36 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
 
   const { name, email, mobile_number, birthday, gender } = formData
 
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    createProfile(formData, true)
+  }
+
   return (
     <Fragment>
       <Navbar />
       <section className='bg-light pb-5'>
-        <section className='position-relative Account-banner bg-warning mt-5'>
+        <section className='position-relative Account-banner bg-warning mt-5 mb-5'>
           <div className='container fs-3 position-absolute top-50 start-50 translate-middle'>
             <nav>
               <ol className='breadcrumb'>
                 <li className='breadcrumb-item'>Home</li>
-                <li className='breadcrumb-item active'>My account</li>
+                <li className='breadcrumb-item active'>Edit Profile</li>
               </ol>
             </nav>
           </div>
         </section>
-        <section className='bg-light mt-5 mb-5'>
+        <div className=' container p-2'>
+          <Alert />
+        </div>
+
+        <section className='bg-light mt-2 mb-5'>
           <div className='container h-100 shadow p-5 pt-4 mb-5'>
-            <div className='h2 mb-4'>Account Information</div>
-            <form>
+            <div className='h2 mb-4'>Edit Profile</div>
+            <form onSubmit={(e) => onSubmit(e)}>
               <div className='row mb-3'>
                 <label for='name' className='col-sm-2 col-form-label'>
                   Name
@@ -57,7 +76,7 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
                     id='name'
                     name='name'
                     value={name}
-                    disabled
+                    onChange={(e) => onChange(e)}
                   />
                 </div>
               </div>
@@ -72,7 +91,7 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
                     id='email'
                     name='email'
                     value={email}
-                    disabled
+                    onChange={(e) => onChange(e)}
                   />
                 </div>
               </div>
@@ -87,7 +106,7 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
                     id='mobile'
                     name='mobile_number'
                     value={mobile_number}
-                    disabled
+                    onChange={(e) => onChange(e)}
                   />
                 </div>
               </div>
@@ -102,7 +121,7 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
                     id='birthday'
                     name='birthday'
                     value={birthday}
-                    disabled
+                    onChange={(e) => onChange(e)}
                   />
                 </div>
               </div>
@@ -111,57 +130,22 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
                   Gender
                 </label>
                 <div className='col-sm-10'>
-                  <select name='gender' value={gender} disabled>
-                    <option value='Male'>Male</option>
+                  <select
+                    name='gender'
+                    value={gender}
+                    onChange={(e) => onChange(e)}
+                  >
+                    <option value='Male' selected>
+                      Male
+                    </option>
                     <option value='Female'>Female</option>
                   </select>
                 </div>
               </div>
-            </form>
-            <div className='mt-5'>
-              <Link className='btn btn-primary' to='/profile/edit-profile'>
-                Edit Profile
-              </Link>
-              <Link
-                className='btn btn-primary mx-3'
-                to='/profile/change-password'
-              >
-                Change Password
-              </Link>
-              <button
-                className='btn btn-danger float-end '
-                data-bs-toggle='modal'
-                data-bs-target='#staticBackdrop'
-              >
-                Delete Account
+              <button type='submit' className='btn btn-primary'>
+                Update Account
               </button>
-              <div className='modal fade' id='staticBackdrop'>
-                <div className='modal-dialog'>
-                  <div className='modal-content'>
-                    <div className='row p-3'>
-                      <div className='col'>
-                        <h5>Are you sure you want to delete your account?</h5>
-                      </div>
-                    </div>
-                    <div className='d-flex flex-row justify-content-end p-3'>
-                      <button
-                        className='btn btn-secondary mx-2'
-                        data-bs-dismiss='modal'
-                      >
-                        Cancel
-                      </button>
-
-                      <button
-                        className='btn btn-danger mx-1'
-                        data-bs-dismiss='modal'
-                      >
-                        DELETE
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </form>
           </div>
         </section>
       </section>
@@ -169,7 +153,9 @@ const Profile = ({ profile: { profile, loading }, getCurrentProfile }) => {
   )
 }
 
-Profile.propTypes = {
+EditProfile.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
 }
@@ -178,4 +164,8 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
 })
 
-export default connect(mapStateToProps, { getCurrentProfile })(Profile)
+export default connect(mapStateToProps, {
+  setAlert,
+  createProfile,
+  getCurrentProfile,
+})(EditProfile)

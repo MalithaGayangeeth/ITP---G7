@@ -9,7 +9,7 @@ const Alert = ({ alerts }) =>
     return (
       <div
         key={alert.id}
-        className={`alert alert-${alert.alertType} border border-danger`}
+        className={`alert alert-${alert.alertType} border border-${alert.alertType}`}
         role='alert'
       >
         {alert.msg}

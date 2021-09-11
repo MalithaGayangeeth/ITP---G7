@@ -1,23 +1,47 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import Navbar from './Navbar'
-import Cart from './Cart'
+import Cart from './cart/Cart'
 import Section from './productSection/Section'
 import Slider from './Slider'
 import Footer from './Footer'
 import Boxes from './Boxes'
 
-const Landing = () => {
+// redux
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { getAllProducts } from '../../actions/products'
+
+const Landing = ({ products: { products, loading }, getAllProducts }) => {
+  const categories = [
+    ...new Set(products.map((product) => product.product_category)),
+  ]
+
+  useEffect(() => {
+    getAllProducts()
+  }, [loading])
+
   return (
     <Fragment>
       <Navbar />
       <Slider />
       <Cart />
-      <Section />
-      <Section />
+      {categories.map((category, index) => (
+        <Section key={index} category={category} products={products} />
+      ))}
+
       <Boxes />
       <Footer />
     </Fragment>
   )
 }
 
-export default Landing
+Landing.propTypes = {
+  getAllProducts: PropTypes.func.isRequired,
+  products: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  products: state.products,
+})
+
+export default connect(mapStateToProps, { getAllProducts })(Landing)

@@ -3,9 +3,9 @@ import React from 'react'
 const Footer = () => {
   return (
     <footer className='p-5 bg-dark text-white'>
-      <div class='container'>
-        <div class='row'>
-          <div class='col-lg-5 text-start me-3'>
+      <div className='container'>
+        <div className='row'>
+          <div className='col-lg-5 text-start me-3'>
             <h1 className='fs-5'>ABOUT US</h1>
             <p className='py-1'>
               TECH GEAR is the most prestigious Store in Sri Lanka, delivers the
@@ -22,24 +22,24 @@ const Footer = () => {
               dedicated online store.
             </p>
           </div>
-          <div class='col text-start me-3'>
+          <div className='col text-start me-3'>
             <h1 className='fs-5'>INFORMATION</h1>
             <p className='py-1'>About Us</p>
             <p className='py-1'>Our Showroom</p>
             <p className='py-1'>Contact Us</p>
           </div>
-          <div class='col text-start me-3'>
+          <div className='col text-start me-3'>
             <h1 className='fs-5'>CONTACT US</h1>
             <p className='py-1'>
-              <i class='bi bi-geo-alt-fill'></i> #101, LGF Unity Plaza, Galle
-              Road, Colombo 04, Sri Lanka.
+              <i className='bi bi-geo-alt-fill'></i> #101, LGF Unity Plaza,
+              Galle Road, Colombo 04, Sri Lanka.
             </p>
             <p className='py-1'>
-              <i class='bi bi-telephone-fill'></i> +94 77 261 3 062 | +94 77 261
-              3 063 +94 112 504 072
+              <i className='bi bi-telephone-fill'></i> +94 77 261 3 062 | +94 77
+              261 3 063 +94 112 504 072
             </p>
             <p className='py-1'>
-              <i class='bi bi-envelope-fill'></i> sales@gamestreet.lk
+              <i className='bi bi-envelope-fill'></i> sales@gamestreet.lk
             </p>
           </div>
         </div>

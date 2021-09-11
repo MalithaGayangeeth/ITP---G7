@@ -1,23 +1,91 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import AdminHome from './AdminHome'
 import Orders from './Orders'
 import Products from './Products'
 import Payments from './Payments'
-import CustomerManagment from './CustomerManagment'
+import UserManagement from './user-managment/UserManagement'
 import EmployeeManagment from './EmployeeManagment'
 import SupplierManagment from './SupplierManagment'
 import AdvertismentManagment from './AdvertismentManagment'
+import { Link, useParams, useHistory } from 'react-router-dom'
 
 const Dashboard = () => {
+  const DEFAULT_ACTIVE_TAB = 'dashboard'
+  const tabs = {
+    dashboard: {
+      id: 'admin_home',
+      title: 'Dashboard',
+      icon: <i className='bi bi-house'></i>,
+      content: <AdminHome />,
+    },
+    orders: {
+      id: 'orders',
+      title: 'Orders',
+      icon: <i className='bi bi-clipboard-check'></i>,
+      content: <Orders />,
+    },
+    products: {
+      id: 'products',
+      title: 'Products',
+      icon: <i className='bi bi-basket'></i>,
+      content: <Products />,
+    },
+    payments: {
+      id: 'payments',
+      title: 'Payments',
+      icon: <i className='bi bi-credit-card'></i>,
+      content: <Payments />,
+    },
+    users: {
+      id: 'userManagment',
+      title: 'User Managment',
+      icon: <i className='bi bi-people'></i>,
+      content: <UserManagement />,
+    },
+    employees: {
+      id: 'employeeManagment',
+      title: 'Employees Managment',
+      icon: <i className='bi bi-building'></i>,
+      content: <EmployeeManagment />,
+    },
+    suppliers: {
+      id: 'supplierManagment',
+      title: 'Supplier Managment',
+      icon: <i className='bi bi-truck'></i>,
+      content: <SupplierManagment />,
+    },
+    advertisments: {
+      id: 'advertismentManagment',
+      title: 'Advertisment Managment',
+      icon: <i className='bi bi-badge-ad'></i>,
+      content: <AdvertismentManagment />,
+    },
+  }
+
+  const { active_tab } = useParams()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (!active_tab) {
+      history.push(`/admin/${DEFAULT_ACTIVE_TAB}`)
+    }
+  }, [])
+
+  const toggle = (tab) => {
+    if (active_tab !== tab) {
+      history.push(`/admin/${tab}`)
+    }
+  }
+
   return (
     <Fragment>
       <header className='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow'>
-        <a
+        <Link
           className='navbar-brand admin-brand col-md-3 col-lg-2 me-0 px-3 fw-bold'
-          href='#'
+          to='/'
         >
           TECH GEAR
-        </a>
+        </Link>
         <button
           className='navbar-toggler position-absolute d-md-none collapsed'
           type='button'
@@ -26,16 +94,12 @@ const Dashboard = () => {
         >
           <span className='navbar-toggler-icon'></span>
         </button>
-        <input
-          className='form-control form-control-dark w-100'
-          type='text'
-          placeholder='Search'
-        />
+
         <div className='navbar-nav'>
           <div className='nav-item text-nowrap'>
-            <a className='nav-link px-3' href='#'>
+            <Link className='nav-link px-3' to='/'>
               Sign out
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -43,140 +107,46 @@ const Dashboard = () => {
       <div className='container-fluid'>
         <div className='row'>
           <nav
-            id='sidebarMenu'
             className='col-md-3 col-lg-2 d-md-block bg-light sidebar collapse'
+            id='sidebarMenu'
           >
             <div className='position-sticky pt-3'>
-              <ul class='nav flex-column' id='myTab'>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link active'
-                    data-bs-toggle='tab'
-                    data-bs-target='#admin_home'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-house'></i>
+              <ul className='nav flex-column' id='myTab'>
+                {Object.entries(tabs).map((tab) => (
+                  <li className='nav-item' role='button' key={tab[0]}>
+                    <span
+                      className={
+                        active_tab === tab[0]
+                          ? 'active nav-link text-danger'
+                          : 'nav-link'
+                      }
+                      onClick={() => {
+                        toggle(tab[0])
+                      }}
+                      role='button'
+                      data-bs-toggle='tab'
+                      data-bs-target={`#${tab[1].id}`}
+                    >
+                      <span className='nav-item-icon'>{tab[1].icon}</span>
+                      {tab[1].title}
                     </span>
-                    Dashboard
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#orders'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-clipboard-check'></i>
-                    </span>
-                    Orders
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#products'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-basket'></i>
-                    </span>
-                    Products
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#payments'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-credit-card'></i>
-                    </span>
-                    Payments
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#customerManagment'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-people'></i>
-                    </span>
-                    Customers Managment
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#employeeManagment'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-building'></i>
-                    </span>
-                    Employees Managment
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#supplierManagment'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-truck'></i>
-                    </span>
-                    Supplier Managment
-                  </a>
-                </li>
-                <li class='nav-item' role='button'>
-                  <a
-                    class='nav-link'
-                    data-bs-toggle='tab'
-                    data-bs-target='#advertismentManagment'
-                  >
-                    <span className='nav-item-icon'>
-                      <i class='bi bi-badge-ad'></i>
-                    </span>
-                    Advertisment Managment
-                  </a>
-                </li>
+                  </li>
+                ))}
               </ul>
             </div>
           </nav>
 
           <main className='col-md-9 ms-sm-auto col-lg-10 px-md-4'>
-            <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom'>
-              <h1 className='h2'>Dashboard</h1>
-            </div>
-            <div class='tab-content' id='myTabContent'>
-              <div class='tab-pane show active' id='admin_home'>
-                <AdminHome />
-              </div>
-              <div class='tab-pane' id='orders'>
-                <Orders />
-              </div>
-              <div class='tab-pane' id='products'>
-                <Products />
-              </div>
-              <div class='tab-pane' id='payments'>
-                <Payments />
-              </div>
-              <div class='tab-pane' id='customerManagment'>
-                <CustomerManagment />
-              </div>
-              <div class='tab-pane' id='employeeManagment'>
-                <EmployeeManagment />
-              </div>
-              <div class='tab-pane' id='supplierManagment'>
-                <SupplierManagment />
-              </div>
-              <div class='tab-pane' id='advertismentManagment'>
-                <AdvertismentManagment />
-              </div>
+            <div className='tab-content' id='myTabContent'>
+              {Object.entries(tabs).map((tab) => (
+                <div
+                  className={`tab-pane ${active_tab === tab[0] && 'active'}`}
+                  key={tab[0]}
+                  id={tab[1].id}
+                >
+                  {tab[1].content}
+                </div>
+              ))}
             </div>
           </main>
         </div>
