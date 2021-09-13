@@ -10,6 +10,7 @@ export const LOGOUT = 'LOGOUT'
 export const GET_PROFILE = 'GET_PROFILE'
 export const PROFILE_ERROR = 'PROFILE_ERROR'
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD'
+export const ACCOUNT_DELETED = 'ACCOUNT_DELETED'
 
 // cart
 export const TOGGLE_AMOUNT = 'TOGGLE_AMOUNT'
@@ -23,6 +24,7 @@ export const CLEAR_PROFILE = 'CLEAR_PROFILE'
 export const UPDATE_USERROLE = 'UPDATE_USERROLE'
 export const USER_ADD = 'USER_ADD'
 export const USER_ADDFAIL = 'USER_ADDFAIL'
+export const USER_DELETE = 'USER_DELETE'
 
 // products
 export const GET_PRODUCTS = 'GET_PRODUCTS'

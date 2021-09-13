@@ -115,4 +115,23 @@ router.post(
   }
 )
 
+// @route   PUT api/admin/users
+// @desc    Delete user accouunt
+// @access  private
+router.put('/users/delete', auth, async (req, res) => {
+  const { userID } = req.body
+
+  try {
+    await User.findOneAndRemove({ _id: userID })
+
+    const users = await User.find().select(
+      '-password -birthday -gender -mobile_number'
+    )
+    res.json(users)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server Error')
+  }
+})
+
 module.exports = router

@@ -7,10 +7,11 @@ import {
   UPDATE_USERROLE,
   USER_ADD,
   USER_ADDFAIL,
+  USER_DELETE,
 } from '../actions/types'
 
 const initialState = {
-  profile: null,
+  oneprofile: null,
   profiles: [],
   loading: true,
   error: {},
@@ -24,7 +25,7 @@ export default function (state = initialState, action) {
     case UPDATE_PASSWORD:
       return {
         ...state,
-        profile: payload,
+        oneprofile: payload,
         loading: false,
       }
     case PROFILE_ERROR:
@@ -37,6 +38,7 @@ export default function (state = initialState, action) {
     case GET_PROFILES:
     case UPDATE_USERROLE:
     case USER_ADD:
+    case USER_DELETE:
       return {
         ...state,
         profiles: payload,
@@ -45,7 +47,7 @@ export default function (state = initialState, action) {
     case CLEAR_PROFILE:
       return {
         ...state,
-        profile: null,
+        oneprofile: null,
         loading: false,
       }
     default:

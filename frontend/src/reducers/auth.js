@@ -6,6 +6,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  ACCOUNT_DELETED,
 } from '../actions/types'
 
 const intialState = {
@@ -40,13 +41,23 @@ export default function (state = intialState, action) {
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
-    case LOGOUT:
       localStorage.removeItem('token')
       return {
         ...state,
         token: null,
         isAuthenticated: false,
         loading: false,
+      }
+
+    case LOGOUT:
+    case ACCOUNT_DELETED:
+      localStorage.removeItem('token')
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        user: null,
       }
 
     default:

@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
   getAllUsers,
   updateUserRole,
   addNewUsers,
+  deleteUserAccount,
 } from '../../../actions/profile'
 import AddNewUser from './AddNewUser'
+
+// alert
+import { setAlert } from '../../../actions/alert'
+import Alert from '../../layout/Alert'
 
 const UserManagement = ({
   getAllUsers,
   updateUserRole,
   addNewUsers,
+  deleteUserAccount,
   profile: { profiles, loading },
 }) => {
   const [addNewUser, toggleAddUser] = useState(false)
-
   const [searchInput, setSearchInput] = useState('')
   const [results, setResults] = useState(profiles)
+  const [deleteUser, setDeleteUser] = useState('')
 
   useEffect(() => {
     getAllUsers()
@@ -43,27 +49,47 @@ const UserManagement = ({
       <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom'>
         <h1 className='h2'>User Managment</h1>
       </div>
-      <div className='d-flex flex-wrap justify-content-center px-0 py-2 mb-3 border-bottom'>
-        <form className='col-6 col-lg-3 mb-2 mb-0 me-auto'>
-          <input
-            type='search'
-            className='form-control'
-            placeholder='Search by user name'
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-        </form>
-
-        <div className='text-end'>
+      <div className='d-flex justify-content-center text-center'>
+        <Alert />
+      </div>
+      <div
+        className={`d-flex flex-wrap ${
+          addNewUser ? '' : 'justify-content-center'
+        } px-0 py-2 mb-3 border-bottom`}
+      >
+        {addNewUser ? (
           <button
             type='button'
-            className='btn btn-dark'
+            className='btn btn-danger px-4 py-2 align-middle'
             onClick={() => toggleAddUser(!addNewUser)}
           >
-            <i className='bi bi-person-plus'></i> Add new User
+            <i className='bi bi-chevron-left pe-1'></i>Back
           </button>
-        </div>
+        ) : (
+          <Fragment>
+            <form className='col-6 col-lg-3 mb-2 mb-0 me-auto'>
+              <input
+                type='search'
+                className='form-control'
+                placeholder='Search by user name'
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </form>
+
+            <div className='text-end'>
+              <button
+                type='button'
+                className='btn btn-dark'
+                onClick={() => toggleAddUser(!addNewUser)}
+              >
+                <i className='bi bi-person-plus'></i> Add new User
+              </button>
+            </div>
+          </Fragment>
+        )}
       </div>
+
       {addNewUser ? (
         <AddNewUser addNewUsers={addNewUsers} />
       ) : (
@@ -102,7 +128,7 @@ const UserManagement = ({
                           className='btn px-3 py-0 me-2 btn-secondary'
                           onClick={() => updateUserRole(profile._id, 'User')}
                         >
-                          <i className='bi bi-people d-none d-lg-inline-block'></i>{' '}
+                          <i className='bi bi-person-fill d-none d-lg-inline-block'></i>{' '}
                           User
                         </button>
                       ) : (
@@ -110,7 +136,7 @@ const UserManagement = ({
                           className='btn px-2 py-0 me-2 btn-secondary'
                           onClick={() => updateUserRole(profile._id, 'Admin')}
                         >
-                          <i className='bi bi-person d-none d-lg-inline-block'></i>{' '}
+                          <i className='bi bi-person-check-fill d-none d-lg-inline-block'></i>{' '}
                           Admin
                         </button>
                       )}
@@ -119,6 +145,7 @@ const UserManagement = ({
                         className='btn px-1 py-0 btn-danger'
                         data-bs-toggle='modal'
                         data-bs-target='#confirmModal'
+                        onClick={() => setDeleteUser(profile._id)}
                       >
                         <i className='bi bi-trash d-none d-lg-inline-block'></i>{' '}
                         Delete
@@ -155,6 +182,7 @@ const UserManagement = ({
                   <button
                     className='btn btn-danger mx-1'
                     data-bs-dismiss='modal'
+                    onClick={() => deleteUserAccount(deleteUser)}
                   >
                     DELETE
                   </button>
@@ -170,9 +198,11 @@ const UserManagement = ({
 }
 
 UserManagement.propTypes = {
+  setAlert: PropTypes.func.isRequired,
   getAllUsers: PropTypes.func.isRequired,
   updateUserRole: PropTypes.func.isRequired,
   addNewUsers: PropTypes.func.isRequired,
+  deleteUserAccount: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
 }
 
@@ -181,7 +211,9 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
+  setAlert,
   getAllUsers,
   updateUserRole,
   addNewUsers,
+  deleteUserAccount,
 })(UserManagement)

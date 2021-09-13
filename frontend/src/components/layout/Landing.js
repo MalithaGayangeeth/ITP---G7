@@ -5,6 +5,7 @@ import Section from './productSection/Section'
 import Slider from './Slider'
 import Footer from './Footer'
 import Boxes from './Boxes'
+import Spinner from './Spinner'
 
 // redux
 import PropTypes from 'prop-types'
@@ -23,13 +24,20 @@ const Landing = ({ products: { products, loading }, getAllProducts }) => {
   return (
     <Fragment>
       <Navbar />
-      <Slider />
-      <Cart />
-      {categories.map((category, index) => (
-        <Section key={index} category={category} products={products} />
-      ))}
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <Slider />
+          <Cart />
 
-      <Boxes />
+          {categories.map((category, index) => (
+            <Section key={index} category={category} products={products} />
+          ))}
+
+          <Boxes />
+        </>
+      )}
       <Footer />
     </Fragment>
   )

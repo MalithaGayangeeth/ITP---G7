@@ -7,9 +7,12 @@ import UserManagement from './user-managment/UserManagement'
 import EmployeeManagment from './EmployeeManagment'
 import SupplierManagment from './SupplierManagment'
 import AdvertismentManagment from './AdvertismentManagment'
-import { Link, useParams, useHistory } from 'react-router-dom'
+import { Link, useParams, useHistory, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { logout } from '../../actions/auth'
 
-const Dashboard = () => {
+const Dashboard = ({ auth: { isAuthenticated, user }, logout }) => {
   const DEFAULT_ACTIVE_TAB = 'dashboard'
   const tabs = {
     dashboard: {
@@ -77,6 +80,13 @@ const Dashboard = () => {
     }
   }
 
+  // Redirect if logged in
+  if (isAuthenticated) {
+    if (user && user.user_type === 'User') {
+      return <Redirect to='/' />
+    }
+  }
+
   return (
     <Fragment>
       <header className='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow'>
@@ -96,10 +106,14 @@ const Dashboard = () => {
         </button>
 
         <div className='navbar-nav'>
-          <div className='nav-item text-nowrap'>
-            <Link className='nav-link px-3' to='/'>
+          <div className='nav-item text-nowrap me-5 me-md-0'>
+            <span
+              role='button'
+              className='nav-link px-3 me-4 me-md-0'
+              onClick={logout}
+            >
               Sign out
-            </Link>
+            </span>
           </div>
         </div>
       </header>
@@ -107,7 +121,7 @@ const Dashboard = () => {
       <div className='container-fluid'>
         <div className='row'>
           <nav
-            className='col-md-3 col-lg-2 d-md-block bg-light sidebar collapse'
+            className='col-md-3 col-lg-2 d-md-block bg-light sidebar collapse pt-0 pt-md-5'
             id='sidebarMenu'
           >
             <div className='position-sticky pt-3'>
@@ -155,4 +169,13 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+Dashboard.propTypes = {
+  logout: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+})
+
+export default connect(mapStateToProps, { logout })(Dashboard)

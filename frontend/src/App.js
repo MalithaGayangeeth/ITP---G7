@@ -8,6 +8,7 @@ import Profile from './components/profile/Profile'
 import EditProfile from './components/profile/EditProfile'
 import ChangePassword from './components/profile/ChangePassword'
 import Dashboard from './components/admin/Dashboard'
+import NotFound from './components/layout/NotFound'
 import PrivateRoute from './components/routing/PrivateRoute'
 
 // Redux
@@ -45,6 +46,7 @@ const App = () => {
               component={ChangePassword}
             />
             <PrivateRoute path='/admin/:active_tab?' component={Dashboard} />
+            <Route component={NotFound} />
           </Switch>
         </Fragment>
       </Router>

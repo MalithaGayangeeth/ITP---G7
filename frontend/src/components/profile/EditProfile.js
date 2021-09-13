@@ -9,7 +9,7 @@ import { setAlert } from '../../actions/alert'
 import Alert from '../layout/Alert'
 
 const EditProfile = ({
-  profile: { profile, loading },
+  profile: { oneprofile, loading },
   createProfile,
   getCurrentProfile,
 }) => {
@@ -24,14 +24,14 @@ const EditProfile = ({
   useEffect(() => {
     getCurrentProfile()
     setFormData({
-      name: loading || !profile.name ? '' : profile.name,
-      email: loading || !profile.email ? '' : profile.email,
+      name: loading || !oneprofile.name ? '' : oneprofile.name,
+      email: loading || !oneprofile.email ? '' : oneprofile.email,
       mobile_number:
-        loading || !profile.mobile_number ? '' : profile.mobile_number,
-      birthday: loading || !profile.birthday ? '' : profile.birthday,
-      gender: loading || !profile.gender ? '' : profile.gender,
+        loading || !oneprofile.mobile_number ? '' : oneprofile.mobile_number,
+      birthday: loading || !oneprofile.birthday ? '' : oneprofile.birthday,
+      gender: loading || !oneprofile.gender ? '' : oneprofile.gender,
     })
-  }, [loading])
+  }, [loading, getCurrentProfile])
 
   const { name, email, mobile_number, birthday, gender } = formData
 

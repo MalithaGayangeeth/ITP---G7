@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { login } from '../../actions/auth'
 import logo from '../../img/logo.png'
+import { setAlert } from '../../actions/alert'
+import Alert from '../layout/Alert'
 
 const Login = ({ login, isAuthenticated, user }) => {
   const [formData, setFormData] = useState({
@@ -24,8 +26,9 @@ const Login = ({ login, isAuthenticated, user }) => {
   // Redirect if logged in
   if (isAuthenticated) {
     if (user && user.user_type === 'Admin') {
-      return <Redirect to='/admin' />
-    } else {
+      return <Redirect to='/admin/dashboard' />
+    }
+    if (user && user.user_type === 'User') {
       return <Redirect to='/' />
     }
   }
@@ -47,6 +50,7 @@ const Login = ({ login, isAuthenticated, user }) => {
 
             <div className='row justify-content-center'>
               <div className='container w-50 login-container'>
+                <Alert />
                 <div className='card-body shadow-sm p-4 mb-5 bg-body rounded'>
                   <h4 className='card-title mb-3'>Login</h4>
                   <form onSubmit={(e) => onSubmit(e)}>
@@ -95,6 +99,7 @@ const Login = ({ login, isAuthenticated, user }) => {
 }
 
 Login.propTypes = {
+  setAlert: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   user_type: PropTypes.object.isRequired,
@@ -105,4 +110,4 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 })
 
-export default connect(mapStateToProps, { login })(Login)
+export default connect(mapStateToProps, { setAlert, login })(Login)

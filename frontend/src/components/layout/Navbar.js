@@ -21,6 +21,13 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             My Account
           </Link>
         </li>
+        {user && user.user_type === 'Admin' && (
+          <li>
+            <Link className='dropdown-item' to='/admin/dashboard'>
+              Dashboard
+            </Link>
+          </li>
+        )}
         <li>
           <Link className='dropdown-item' to='#!'>
             My Orders
@@ -51,7 +58,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           <i className='bi bi-telephone-fill pe-2'></i>
           Hot Line <span className='fw-light'>+94 123 2345 </span>
           <span className='h5 fw-light ps-1 pe-1'>|</span>
-          <Link to='/' className='text-decoration-none text-light'>
+          <Link to='/faq' className='text-decoration-none text-light'>
             Help & Support
           </Link>
         </h6>

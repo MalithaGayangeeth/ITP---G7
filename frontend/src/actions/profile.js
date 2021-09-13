@@ -10,6 +10,8 @@ import {
   UPDATE_USERROLE,
   USER_ADD,
   USER_ADDFAIL,
+  ACCOUNT_DELETED,
+  USER_DELETE,
 } from './types'
 
 // Get user profile
@@ -172,6 +174,7 @@ export const addNewUsers =
         type: USER_ADD,
         payload: res.data,
       })
+      dispatch(setAlert('New User Added', 'success'))
     } catch (err) {
       const errors = err.response.data.errors
 
@@ -188,3 +191,47 @@ export const addNewUsers =
       })
     }
   }
+
+// Delete own account
+export const deleteAccount = () => async (dispatch) => {
+  try {
+    await axios.delete('/api/profile')
+
+    dispatch({ type: CLEAR_PROFILE })
+    dispatch({ type: ACCOUNT_DELETED })
+
+    dispatch(setAlert('Your account has been permanantly deleted', 'success'))
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    })
+  }
+}
+
+// Delete user accounts (admin*)
+export const deleteUserAccount = (userID) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+
+  const body = JSON.stringify({ userID })
+
+  try {
+    const res = await axios.put('/api/admin/users/delete', body, config)
+
+    dispatch({
+      type: USER_DELETE,
+      payload: res.data,
+    })
+
+    dispatch(setAlert('User account has been permanantly deleted', 'success'))
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    })
+  }
+}
